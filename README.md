@@ -1,5 +1,4 @@
-# Node.js – JWT Authentication & Authorization example with JSONWebToken & Sequelize
-
+# home assigment Test node js Api 
 
 
 ## Project setup
@@ -9,5 +8,5 @@ npm install
 
 ### Run
 ```
-node server.js
+npm start
 ```
