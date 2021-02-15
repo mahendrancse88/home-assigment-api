@@ -1,10 +1,9 @@
 module.exports = {
-  HOST: "35.198.206.239",
-  USER: "root",
-  PASSWORD: "Mahe@@88",
-  DB: "homeassignment",
+  HOST: "us-cdbr-east-03.cleardb.com",
+  USER: "ba128a36dace8d",
+  PASSWORD: "8942c422",
+  DB: "heroku_b544ecbea11f279",
   dialect: "mysql",
-  socketPath:"/cloudsql/home-assignment-api:asia-southeast1:home-assignment-api",
   pool: {
     max: 5,
     min: 0,
