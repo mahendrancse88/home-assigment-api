@@ -10,9 +10,40 @@ var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
   // Save User to Database
-  console.log(req.body)
+  var error =false;
+  if(req.body.name.length == 0){
+    error = true;
+    res.status(400).send({ message: "name field is required!" });
+  }
+  if(req.body.email.length == 0){
+    error = true;
+    res.status(201).send({ message: "email field is required!" });
+  }
+  if (!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(req.body.email)))
+  {
+    res.status(201).send({ message: "email invalid!" });
+  }
+  if(req.body.password.length == 0){
+    error = true;
+    res.status(201).send({ message: "password field is required!" });
+  }
+  if(req.body.password.length < 12){
+    error = true;
+    res.status(201).send({ message: "The password must be Minimum 12 characters." });
+  }
+  if(!(/[A-Z]/.test(req.body.password))){
+    error = true;
+    res.status(201).send({ message: "The password must be At least one upper-case alphabet." });
+  }
+  var regex = /[-!$%^&*()_+|~=`{}[:;<>?,.@#\]]/g;
+  if(!regex.test((req.body.password))){
+    console.log('ewfwef')
+    error = true;
+    res.status(201).send({ message: "The password Contains at least one non-alphanumeric character." });
+  }
+  if( error == false) { 
   User.create({
-    username: req.body.username,
+    name: req.body.name,
     email: req.body.email,
     roles:["moderator","user"],
     password: bcrypt.hashSync(req.body.password, 8)
@@ -40,14 +71,46 @@ exports.signup = (req, res) => {
     .catch(err => {
       res.status(500).send({ message: err.message });
     });
+  }
 };
 
 exports.signin = (req, res) => {
   console.log('req.body.username');
-  console.log(req.body.username);
+  console.log(req.body.email);
+  var error =false;
+  if(req.body.email.length == 0){
+    error = true;
+    res.status(201).send({ message: "email field is required!" });
+  }
+  if (!(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(req.body.email)))
+  {
+    res.status(201).send({ message: "email invalid!" });
+  }
+  if(req.body.password.length == 0){
+    error = true;
+    res.status(201).send({ message: "password field is required!" });
+  }
+  if(req.body.password.length < 12){
+    error = true;
+    res.status(201).send({ message: "The password must be Minimum 12 characters." });
+  }
+  if(!(/[A-Z]/.test(req.body.password))){
+    error = true;
+    res.status(201).send({ message: "The password must be At least one upper-case alphabet." });
+  }
+  var regex = /[-!$%^&*()_+|~=`{}[:;<>?,.@#\]]/g;
+  if(!regex.test((req.body.password))){
+    console.log('ewfwef')
+    error = true;
+    res.status(201).send({ message: "The password Contains at least one non-alphanumeric character." });
+  }
+
+
+  if( error == false) { 
+
   User.findOne({
     where: {
-      email: req.body.username
+      email: req.body.email
     }
   })
     .then(user => {
@@ -78,7 +141,7 @@ exports.signin = (req, res) => {
         }
         res.status(200).send({
           id: user.id,
-          username: user.username,
+          name: user.name,
           email: user.email,
           roles: authorities,
           accessToken: token
@@ -88,4 +151,5 @@ exports.signin = (req, res) => {
     .catch(err => {
       res.status(500).send({ message: err.message });
     });
+  }
 };
